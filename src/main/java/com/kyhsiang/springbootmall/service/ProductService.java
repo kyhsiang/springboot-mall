@@ -7,4 +7,6 @@ public interface ProductService {
 
     Product getProductById(Integer productId);
 
+    Integer createProduct(Product product);
+
 }
