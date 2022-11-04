@@ -1,6 +1,7 @@
 package com.kyhsiang.springbootmall.dao.impl;
 
 import com.kyhsiang.springbootmall.dao.ProductDao;
+import com.kyhsiang.springbootmall.dto.ProductRequest;
 import com.kyhsiang.springbootmall.mapper.ProductRowMapper;
 import com.kyhsiang.springbootmall.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,15 +36,18 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public Integer createProduct(Product product) {
-        String sql = "INSERT INTO product(product_name, category, image_url, price, stock, description, created_date) VALUES(:productName,:category,:imageUrl,:price,:stock,:description,now())";
+    public Integer createProduct(ProductRequest productRequest) {
+        String sql = "INSERT INTO product(product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES(:productName,:category,:imageUrl,:price,:stock,:description,:createdDate,:lastModifiedDate)";
         Map<String, Object> map = new HashMap<>();
-        map.put("productName", product.getProductName());
-        map.put("category", product.getCategory());
-        map.put("imageUrl", product.getImageUrl());
-        map.put("price", product.getPrice());
-        map.put("stock", product.getStock());
-        map.put("description", product.getDescription());
+        map.put("productName", productRequest.getProductName());
+        map.put("category", productRequest.getCategory());
+        map.put("imageUrl", productRequest.getImageUrl());
+        map.put("price", productRequest.getPrice());
+        map.put("stock", productRequest.getStock());
+        map.put("description", productRequest.getDescription());
+        Date now = new Date();
+        map.put("createdDate", now);
+        map.put("lastModifiedDate", now);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(), keyHolder);
         int productId = keyHolder.getKey().intValue();
