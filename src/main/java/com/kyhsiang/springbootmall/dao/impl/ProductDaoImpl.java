@@ -1,5 +1,6 @@
 package com.kyhsiang.springbootmall.dao.impl;
 
+import com.kyhsiang.springbootmall.constant.ProductCategory;
 import com.kyhsiang.springbootmall.dao.ProductDao;
 import com.kyhsiang.springbootmall.dto.ProductRequest;
 import com.kyhsiang.springbootmall.mapper.ProductRowMapper;
@@ -23,9 +24,17 @@ public class ProductDaoImpl implements ProductDao {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Override
-    public List<Product> getProducts() {
-        String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date, last_modified_date FROM product";
+    public List<Product> getProducts(ProductCategory category, String search) {
+        String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date, last_modified_date FROM product WHERE 1=1";
         Map<String, Object> map = new HashMap<>();
+        if (category != null) {
+            sql = sql + " AND category = :category";
+            map.put("category", category.name());
+        }
+        if (search != null){
+            sql = sql + " AND product_name LIKE :search";
+            map.put("search", "%" + search + "%");
+        }
         List<Product> productList = namedParameterJdbcTemplate.query(sql, map, new ProductRowMapper());
         return productList;
     }
@@ -45,7 +54,7 @@ public class ProductDaoImpl implements ProductDao {
 
     @Override
     public Integer createProduct(ProductRequest productRequest) {
-        String sql = "INSERT INTO product(product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES(:productName,:category,:imageUrl,:price,:stock,:description,:createdDate,:lastModifiedDate)";
+        String sql = "INSERT INTO product(product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES (:productName, :category, :imageUrl, :price, :stock, :description, :createdDate, :lastModifiedDate)";
         Map<String, Object> map = new HashMap<>();
         map.put("productName", productRequest.getProductName());
         map.put("category", productRequest.getCategory().toString());
@@ -57,7 +66,7 @@ public class ProductDaoImpl implements ProductDao {
         map.put("createdDate", now);
         map.put("lastModifiedDate", now);
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(), keyHolder);
+        namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(map), keyHolder);
         int productId = keyHolder.getKey().intValue();
         return productId;
     }
