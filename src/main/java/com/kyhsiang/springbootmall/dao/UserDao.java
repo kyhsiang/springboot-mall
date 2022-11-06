@@ -1,5 +1,6 @@
 package com.kyhsiang.springbootmall.dao;
 
+import com.kyhsiang.springbootmall.dto.UserLoginRequest;
 import com.kyhsiang.springbootmall.dto.UserRegisterRequest;
 import com.kyhsiang.springbootmall.model.User;
 
