@@ -1,8 +1,8 @@
 package com.kyhsiang.springbootmall.dao.impl;
 
 import com.kyhsiang.springbootmall.dao.UserDao;
-import com.kyhsiang.springbootmall.dto.UserLoginRequest;
 import com.kyhsiang.springbootmall.dto.UserRegisterRequest;
+import com.kyhsiang.springbootmall.dto.UserUpdateRequest;
 import com.kyhsiang.springbootmall.mapper.UserRowMapper;
 import com.kyhsiang.springbootmall.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +62,23 @@ public class UserDaoImpl implements UserDao {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<User> getUsers() {
+        String sql = "SELECT user_id, email, password, created_date, last_modified_date FROM user";
+        Map<String, Object> map = new HashMap<>();
+        List<User> userList = namedParameterJdbcTemplate.query(sql, map, new UserRowMapper());
+        return userList;
+    }
+
+    @Override
+    public void updateUser(Integer userId, UserUpdateRequest userUpdateRequest) {
+        String sql = "UPDATE user SET password = :newPassword, last_modified_date = :lastModifiedDate WHERE user_id = :userId";
+        Map<String, Object> map = new HashMap<>();
+        map.put("newPassword", userUpdateRequest.getNewPassword());
+        map.put("userId", userId);
+        map.put("lastModifiedDate", new Date());
+        namedParameterJdbcTemplate.update(sql, map);
     }
 }

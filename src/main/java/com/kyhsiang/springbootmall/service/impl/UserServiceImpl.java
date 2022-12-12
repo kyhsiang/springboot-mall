@@ -3,6 +3,7 @@ package com.kyhsiang.springbootmall.service.impl;
 import com.kyhsiang.springbootmall.dao.UserDao;
 import com.kyhsiang.springbootmall.dto.UserLoginRequest;
 import com.kyhsiang.springbootmall.dto.UserRegisterRequest;
+import com.kyhsiang.springbootmall.dto.UserUpdateRequest;
 import com.kyhsiang.springbootmall.model.User;
 import com.kyhsiang.springbootmall.service.UserService;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -58,5 +61,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Integer userId) {
         return userDao.getUserById(userId);
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return userDao.getUsers();
+    }
+
+    @Override
+    public void updateUser(Integer userId, UserUpdateRequest userUpdateRequest) {
+        User user = userDao.getUserById(userId);
+        String oldHashedPassword = DigestUtils.md5DigestAsHex(userUpdateRequest.getOldPassword().getBytes());
+        //檢查輸入的原密碼是否正確
+        if (!oldHashedPassword.equals(user.getPassword())) {
+            log.warn("原密碼不正確");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        //檢查舊密碼和新密碼是否重複
+        if (userUpdateRequest.getNewPassword().equals(userUpdateRequest.getOldPassword())) {
+            log.warn("新密碼不可與舊密碼一樣");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        String newHashedPassword = DigestUtils.md5DigestAsHex(userUpdateRequest.getNewPassword().getBytes());
+        userUpdateRequest.setNewPassword(newHashedPassword);
+        userDao.updateUser(userId, userUpdateRequest);
     }
 }
