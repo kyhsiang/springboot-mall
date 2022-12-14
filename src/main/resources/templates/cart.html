@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>購物車</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .th{width: 200px;}
+        .td{width: 100px;}
+    </style>
+</head>
+<body>
+<div th:replace="header :: header">Header</div>
+<div class="container mt-3">
+    <h2>購物車</h2>
+    <div id="warning">
+
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="th">商品編號</th>
+            <th class="th">圖片</th>
+            <th class="th">名稱</th>
+            <th class="th">數量</th>
+            <th class="th">價格</th>
+        </tr>
+        </thead>
+        <tbody id="cart">
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+        <button type="button" class="btn btn-primary btn-lg" onclick="checkout()">結帳</button>
+    </div>
+    <input type="hidden" id="userId" th:value="${session.userId}">
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+<script src="/js/jquery-3.6.1.js" type="application/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
+<script type="application/javascript">
+    var userId = $("#userId").val();
+    console.log(userId);
+
+    if (Cookies.get("cartId") == null || Cookies.get("cartId") == "") {
+        $("#warning").prepend("<span>購物車內沒有物品喔！趕快去選購！</span>");
+    } else {
+        var idResult = Cookies.get("cartId");
+        console.log(idResult);
+        ids = idResult.split(",");
+        console.log(ids);
+
+        ids.forEach(function (id) {
+            $.ajax({
+                url: "/products/" + id,
+                method: "get",
+                dataType: "json",
+                contentType: "application/json",
+                data: {}
+            }).done(function (res) {
+                $("#cart").prepend("<tr>\n" +
+                    "            <td class='td'>" + res.productId + "</td>\n" +
+                    "            <td class='td'><img style='width: 100%' src=\"" + res.imageUrl + "\"></td>\n" +
+                    "            <td class='td'>" + res.productName + "</td>\n" +
+                    "            <td class='td'><input name='quantity' min=\"0\" value=\"1\" type=\"number\"/></td>\n" +
+                    "            <td class='td'>NT$" + res.price + "</td>\n" +
+                    "            <td class='td'><button type=\"button\" class=\"btn btn-danger\" onclick=\"deleteCart(" + res.productId + ")\">刪除</button></td>\n" +
+                    "           </tr>\n" +
+                    "<input name='productId' type='hidden' value='" + res.productId + "'>");
+            })
+        });
+    }
+
+    function deleteCart(id) {
+        var idResult = Cookies.get("cartId");
+        var ids = idResult.split(",");
+        var index = ids.indexOf(id.toString());
+        if (index > -1) {
+            ids.splice(index, 1);
+        }
+        var newIds = ids.toString();
+        Cookies.set("cartId", newIds);
+        window.location.reload();
+    }
+
+    function checkout() {
+        if (userId == null || userId == "") {
+            alert("請先登入");
+            location.href = "/login";
+            return;
+        }
+        var productIds = [];
+        var productQuantities = [];
+        var idArr = document.querySelectorAll('[name="productId"]');
+        for (var i = 0; i < idArr.length; i++) {
+            productIds.push(idArr[i].value);
+        }
+        var quantityArr = document.querySelectorAll('[name="quantity"]');
+        for (var i = 0; i < quantityArr.length; i++) {
+            productQuantities.push(quantityArr[i].value);
+        }
+        console.log(productIds);
+        console.log(productQuantities);
+        var buyItemLists = [];
+        for (var i = 0; i < productIds.length; i++) {
+            var support = {
+                productId: parseInt(productIds[i]),
+                quantity: parseInt(productQuantities[i])
+            }
+            buyItemLists.push(support);
+        }
+        console.log(buyItemLists);
+        var formData = {
+            buyItemList: buyItemLists
+        }
+        console.log(formData);
+        $.ajax({
+            url: "/users/" + userId + "/orders",
+            method: "post",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(formData),
+            success: function () {
+                alert("訂單添加成功");
+                deleteCookies();
+                location.href = "/index";
+            },
+            error: function () {
+                alert("商品庫存不足");
+            }
+        })
+    }
+
+    function deleteCookies() {
+        var currentId = Cookies.get("cartId");
+        currentId = "";
+        Cookies.set("cartId", currentId);
+    }
+</script>
