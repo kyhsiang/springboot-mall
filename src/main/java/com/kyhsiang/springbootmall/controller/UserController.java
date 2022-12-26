@@ -19,6 +19,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    //註冊會員
     @PostMapping("/users/register")
     public ResponseEntity<User> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
         Integer userId = userService.register(userRegisterRequest);
@@ -26,6 +27,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
+    //登入
     @PostMapping("/users/login")
     public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest,
                                       HttpSession session){
@@ -35,6 +37,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
+    //修改會員密碼
     @PutMapping("/users/update")
     public ResponseEntity<User> updateUser(@RequestBody @Valid UserUpdateRequest userUpdateRequest,
                                            HttpSession session) {

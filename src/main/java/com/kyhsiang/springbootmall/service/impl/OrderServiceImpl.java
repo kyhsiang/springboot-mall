@@ -36,9 +36,10 @@ public class OrderServiceImpl implements OrderService {
 
     private final static Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
+    //新增訂單
     @Transactional
     @Override
-    public Integer createOrder(Integer userId, CreateOrderRequest createOrderRequest) {
+    public synchronized Integer createOrder(Integer userId, CreateOrderRequest createOrderRequest) {
         //檢查user是否存在
         User user = userDao.getUserById(userId);
         if (user == null) {
@@ -80,6 +81,7 @@ public class OrderServiceImpl implements OrderService {
         return orderId;
     }
 
+    //藉由訂單編號獲取訂單
     @Override
     public Order getOrderById(Integer orderId) {
         Order order = orderDao.getOrderById(orderId);
@@ -88,6 +90,7 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
+    //獲取所有訂單
     @Override
     public List<Order> getOrders(OrderQueryParams orderQueryParams) {
         List<Order> orderList = orderDao.getOrders(orderQueryParams);
@@ -98,6 +101,7 @@ public class OrderServiceImpl implements OrderService {
         return orderList;
     }
 
+    //獲取訂單總數
     @Override
     public Integer countOrder(OrderQueryParams orderQueryParams) {
         return orderDao.countOrder(orderQueryParams);

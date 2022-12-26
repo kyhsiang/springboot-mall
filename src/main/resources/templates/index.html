@@ -36,6 +36,7 @@
 <script src="/js/jquery-3.6.1.js" type="application/javascript"></script>
 <script type="application/javascript">
 
+    //獲取商品列表
     window.onload = function () {
         $.ajax({
             url: "/products",
@@ -71,6 +72,7 @@
         })
     }
 
+    //無搜尋條件下翻頁
     function turnPage(i) {
         $.ajax({
             url: "/products?offset=" + i * 12,
@@ -99,6 +101,7 @@
         })
     }
 
+    //藉由關鍵字獲取商品列表
     function searchTitle() {
         $.ajax({
             url: "/products?search=" + $("#searchName").val(),
@@ -134,6 +137,7 @@
         })
     }
 
+    //在關鍵字搜尋條件下翻頁
     function turnPageSearchTitle(searchName, i) {
         $.ajax({
             url: "/products?search=" + searchName + "&offset=" + i * 12,
@@ -162,6 +166,7 @@
         })
     }
 
+    //藉由商品種類獲取商品列表
     function searchCategory(categoryName) {
         $.ajax({
             url: "/products?category=" + categoryName,
@@ -197,6 +202,7 @@
         })
     }
 
+    //在特定商品種類條件下翻頁
     function turnPageSearchCategory(categoryName, i) {
         var url = "/products?offset=" + i * 12;
         if (categoryName != "") {
@@ -229,6 +235,7 @@
         })
     }
 
+    //將商品加入購物車
     function addToCart(item, id) {
         if (Cookies.get("cartId") == null || Cookies.get("cartId") == "") {
             Cookies.set("cartId", id);

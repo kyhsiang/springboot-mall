@@ -19,6 +19,7 @@
         </tr>
         </thead>
         <tbody>
+        <!-- 獲取所有會員詳細資訊 -->
         <tr th:each="user:${userList}">
             <th scope="row" th:text="${user.userId}"></th>
             <td th:text="${user.email}"></td>

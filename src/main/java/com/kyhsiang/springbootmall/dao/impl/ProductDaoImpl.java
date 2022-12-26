@@ -23,6 +23,7 @@ public class ProductDaoImpl implements ProductDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    //獲取特定條件下的商品總數
     @Override
     public Integer countProduct(ProductQueryParams productQueryParams) {
         String sql = "SELECT count(*) FROM product WHERE 1=1";
@@ -34,6 +35,7 @@ public class ProductDaoImpl implements ProductDao {
         return total;
     }
 
+    //獲取特定條件下的所有商品
     @Override
     public List<Product> getProducts(ProductQueryParams productQueryParams) {
         String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date, last_modified_date FROM product WHERE 1=1";
@@ -54,6 +56,7 @@ public class ProductDaoImpl implements ProductDao {
         return productList;
     }
 
+    //藉由商品編號獲取特定商品資訊
     @Override
     public Product getProductById(Integer productId) {
         String sql = "SELECT product_id, product_name, category, image_url, price, stock, description, created_date, last_modified_date FROM product WHERE product_id = :productId";
@@ -67,6 +70,7 @@ public class ProductDaoImpl implements ProductDao {
         }
     }
 
+    //新增商品
     @Override
     public Integer createProduct(ProductRequest productRequest) {
         String sql = "INSERT INTO product(product_name, category, image_url, price, stock, description, created_date, last_modified_date) VALUES (:productName, :category, :imageUrl, :price, :stock, :description, :createdDate, :lastModifiedDate)";
@@ -86,6 +90,7 @@ public class ProductDaoImpl implements ProductDao {
         return productId;
     }
 
+    //修改商品資訊
     @Override
     public void updateProduct(Integer productId, ProductRequest productRequest) {
         String sql = "UPDATE product SET product_name = :productName, category = :category, image_url = :imageUrl, price = :price, stock = :stock, description = :description, last_modified_date = :lastModifiedDate WHERE product_id = :productId";
@@ -101,6 +106,7 @@ public class ProductDaoImpl implements ProductDao {
         namedParameterJdbcTemplate.update(sql, map);
     }
 
+    //藉由商品編號刪除特定商品
     @Override
     public void deleteProductById(Integer productId) {
         String sql = "DELETE FROM product WHERE product_id = :productId";
@@ -109,6 +115,7 @@ public class ProductDaoImpl implements ProductDao {
         namedParameterJdbcTemplate.update(sql, map);
     }
 
+    //修改商品庫存
     @Override
     public void updateStock(Integer productId, Integer stock) {
         String sql = "UPDATE product SET stock = :stock, last_modified_date = :lastModifiedDate WHERE product_id = :productId";

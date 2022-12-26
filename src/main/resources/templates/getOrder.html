@@ -50,6 +50,8 @@
             </ul>
         </div>
     </div>
+
+    <!-- 獲取使用者ID -->
     <input type="hidden" id="userId" th:value="${session.userId}">
 </div>
 </body>
@@ -57,9 +59,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 <script src="/js/jquery-3.6.1.js" type="application/javascript"></script>
 <script type="application/javascript">
+
+    //獲取使用者ID
     var userId = $("#userId").val();
     console.log(userId);
 
+    //獲取訂單
     window.onload = function () {
         $.ajax({
             url: "/users/" + userId + "/orders",
@@ -90,6 +95,7 @@
         })
     }
 
+    //翻頁
     function turnPage(i) {
         $.ajax({
             url: "/users/" + userId + "/orders?offset=" + i * 10,
@@ -114,6 +120,7 @@
         })
     }
 
+    //獲取訂單詳細內容
     function getOrderItem(orderId) {
         $("#orderItem").empty();
         $.ajax({

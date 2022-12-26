@@ -24,7 +24,7 @@
                            placeholder="請輸入密碼">
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-danger">註冊會員</button>
+                    <button type="button" class="btn btn-danger" onclick="userRegister()">註冊會員</button>
                 </div>
             </form>
         </div>
@@ -36,33 +36,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 <script src="/js/jquery-3.6.1.js" type="application/javascript"></script>
 <script type="application/javascript">
-    $(document).ready(function () {
-        $("#myForm").submit(function (event) {
-            event.preventDefault();
-            ajaxPost();
-        });
 
-        function ajaxPost() {
-            var formData = {
-                email: $("#email").val(),
-                password: $("#password").val()
-            }
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json",
-                url: "/users/register",
-                data: JSON.stringify(formData),
-                success: function (res) {
-                    var userEmail = res.email;
-                    alert(userEmail + "註冊成功");
-                    location.href = "/index";
-                },
-                error: function () {
-                    alert("註冊失敗，該郵件已被註冊");
-                }
-            });
+    //註冊會員
+    function userRegister() {
+        var formData = {
+            email: $("#email").val(),
+            password: $("#password").val()
         }
-    })
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            url: "/users/register",
+            data: JSON.stringify(formData),
+            success: function (res) {
+                var userEmail = res.email;
+                alert(userEmail + "註冊成功");
+                location.href = "/index";
+            },
+            error: function () {
+                alert("註冊失敗，該郵件已被註冊");
+            }
+        });
+    }
 </script>
 </html>

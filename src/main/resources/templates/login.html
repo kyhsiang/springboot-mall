@@ -24,7 +24,7 @@
                            placeholder="請輸入密碼">
                 </div>
                 <div class="mb-3">
-                    <button type="submit" class="btn btn-danger">登入會員</button>
+                    <button type="button" class="btn btn-danger" onclick="login()">登入會員</button>
                 </div>
             </form>
         </div>
@@ -36,33 +36,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 <script src="/js/jquery-3.6.1.js" type="application/javascript"></script>
 <script type="application/javascript">
-    $(document).ready(function () {
-        $("#myForm").submit(function (event) {
-            event.preventDefault();
-            ajaxPost();
-        });
 
-        function ajaxPost() {
-            var formData = {
-                email: $("#email").val(),
-                password: $("#password").val()
-            }
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json",
-                url: "/users/login",
-                data: JSON.stringify(formData),
-                success: function (res) {
-                    var userName = res.email;
-                    alert(userName + "登入成功");
-                    location.href = "/index";
-                },
-                error: function () {
-                    alert("登入失敗");
-                }
-            });
+    //登入功能
+    function login() {
+        var formData = {
+            email: $("#email").val(),
+            password: $("#password").val()
         }
-    })
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json",
+            url: "/users/login",
+            data: JSON.stringify(formData),
+            success: function (res) {
+                var userName = res.email;
+                alert(userName + "登入成功");
+                location.href = "/index";
+            },
+            error: function () {
+                alert("登入失敗");
+            }
+        });
+    }
 </script>
 </html>

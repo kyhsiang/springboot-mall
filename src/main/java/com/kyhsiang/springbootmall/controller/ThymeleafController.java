@@ -25,14 +25,14 @@ public class ThymeleafController {
 
     @GetMapping("/adduser")
     public String addUser() {
-        return "adduser";
+        return "addUser";
     }
 
     @GetMapping("/getuser")
     public String getUsers(Model model) {
         List<User> userList = userService.getUsers();
         model.addAttribute("userList", userList);
-        return "getuser";
+        return "getUser";
     }
 
     @GetMapping("/login")
@@ -48,27 +48,27 @@ public class ThymeleafController {
 
     @GetMapping("/updateuser")
     public String updateUser() {
-        return "updateuser";
+        return "updateUser";
     }
 
     @GetMapping("/addproduct")
     public String addProduct() {
-        return "addproduct";
+        return "addProduct";
     }
 
     @GetMapping("/getproduct")
     public String getProduct() {
-        return "getproduct";
+        return "getProduct";
     }
 
     @GetMapping("/updateproduct")
     public String updateProduct() {
-        return "updateproduct";
+        return "updateProduct";
     }
 
     @GetMapping("/deleteproduct")
     public String deleteProduct() {
-        return "deleteproduct";
+        return "deleteProduct";
     }
 
     @GetMapping("/cart")
@@ -78,6 +78,6 @@ public class ThymeleafController {
 
     @GetMapping("/getorder")
     public String getOrder() {
-        return "getorder";
+        return "getOrder";
     }
 }

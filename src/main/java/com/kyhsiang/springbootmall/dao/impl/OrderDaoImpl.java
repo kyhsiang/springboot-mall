@@ -24,6 +24,7 @@ public class OrderDaoImpl implements OrderDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    //新增訂單
     @Override
     public Integer createOrder(Integer userId, Integer totalAmount) {
         String sql = "INSERT INTO `order`(user_id, total_amount, created_date, last_modified_date) VALUES (:userId, :totalAmount, :createdDate, :lastModifiedDate)";
@@ -39,6 +40,7 @@ public class OrderDaoImpl implements OrderDao {
         return orderId;
     }
 
+    //新增訂單詳細內容
     @Override
     public void createOrderItems(Integer orderId, List<OrderItem> orderItemList) {
         String sql = "INSERT INTO order_item(order_id, product_id, quantity, amount) VALUES (:orderId, :productId, :quantity, :amount)";
@@ -54,6 +56,7 @@ public class OrderDaoImpl implements OrderDao {
         namedParameterJdbcTemplate.batchUpdate(sql, parameterSources);
     }
 
+    //藉由訂單編號獲取訂單
     @Override
     public Order getOrderById(Integer orderId) {
         String sql = "SELECT order_id, user_id, total_amount, created_date, last_modified_date FROM `order` WHERE order_id = :orderId";
@@ -67,6 +70,7 @@ public class OrderDaoImpl implements OrderDao {
         }
     }
 
+    //藉由訂單編號獲取訂單詳細內容
     @Override
     public List<OrderItem> getOrderItemsByOrderId(Integer orderId) {
         String sql = "SELECT oi.order_item_id, oi.order_id, oi.product_id, oi.quantity, oi.amount, p.product_name, p.image_url " +
@@ -79,6 +83,7 @@ public class OrderDaoImpl implements OrderDao {
         return orderItemList;
     }
 
+    //獲取特定會員的所有訂單
     @Override
     public List<Order> getOrders(OrderQueryParams orderQueryParams) {
         String sql = "SELECT order_id, user_id, total_amount, created_date, last_modified_date FROM `order` WHERE 1=1";
@@ -95,6 +100,7 @@ public class OrderDaoImpl implements OrderDao {
         return orderList;
     }
 
+    //獲取特定會員的訂單總數
     @Override
     public Integer countOrder(OrderQueryParams orderQueryParams) {
         String sql = "SELECT count(*) FROM `order` WHERE 1=1";

@@ -23,6 +23,7 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    //新增會員
     @Override
     public Integer createUser(UserRegisterRequest userRegisterRequest) {
         String sql = "INSERT INTO user(email, password, created_date, last_modified_date) VALUES (:email, :password, :createdDate, :lastModifiedDate)";
@@ -38,6 +39,7 @@ public class UserDaoImpl implements UserDao {
         return userId;
     }
 
+    //藉由會員編號獲取特定會員資訊
     @Override
     public User getUserById(Integer userId) {
         String sql = "SELECT user_id, email, password, created_date, last_modified_date FROM user WHERE user_id = :userId";
@@ -51,6 +53,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    //藉由會員Email獲取特定會員資訊
     @Override
     public User getUserByEmail(String email) {
         String sql = "SELECT user_id, email, password, created_date, last_modified_date FROM user WHERE email = :email";
@@ -64,6 +67,7 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    //獲取所有會員資訊
     @Override
     public List<User> getUsers() {
         String sql = "SELECT user_id, email, password, created_date, last_modified_date FROM user";
@@ -72,6 +76,7 @@ public class UserDaoImpl implements UserDao {
         return userList;
     }
 
+    //修改會員密碼
     @Override
     public void updateUser(Integer userId, UserUpdateRequest userUpdateRequest) {
         String sql = "UPDATE user SET password = :newPassword, last_modified_date = :lastModifiedDate WHERE user_id = :userId";

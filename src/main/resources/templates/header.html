@@ -19,6 +19,7 @@
                         產品服務
                     </a>
                     <div class="dropdown-menu">
+                        <!-- 只有管理員可以新增、修改、刪除商品資訊 -->
                         <a  class="dropdown-item" href="/addproduct" th:if="${session.userId == 1}">新增產品</a>
                         <a class="dropdown-item" href="/getproduct">搜尋產品</a>
                         <a class="dropdown-item" href="/updateproduct" th:if="${session.userId == 1}">修改產品</a>
@@ -31,14 +32,18 @@
                     </a>
                     <div class="dropdown-menu">
                         <a  class="dropdown-item" href="/adduser">註冊會員</a>
+                        <!-- 只有管理員可以查看所有會員資訊 -->
                         <a class="dropdown-item" href="/getuser" th:if="${session.userId == 1}">查看會員</a>
+                        <!-- 登入後才能使用修改密碼和查看訂單功能 -->
                         <a class="dropdown-item" href="/updateuser" th:if="${session.userId != null}">修改密碼</a>
                         <a class="dropdown-item" href="/getorder" th:if="${session.userId != null}">查看訂單</a>
                     </div>
                 </li>
+                <!-- 未登入的使用者才能使用登入功能 -->
                 <li class="nav-item" th:if="${session.userId == null}">
                     <a class="nav-link" href="/login">登入</a>
                 </li>
+                <!-- 已登入的使用者才能使用登出功能 -->
                 <li class="nav-item" th:if="${session.userId != null}">
                     <a class="nav-link" href="/logout">登出</a>
                 </li>

@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
+    //註冊會員
     @Override
     public Integer register(UserRegisterRequest userRegisterRequest) {
         //檢查註冊的email
@@ -39,6 +40,7 @@ public class UserServiceImpl implements UserService {
         return userDao.createUser(userRegisterRequest);
     }
 
+    //登入
     @Override
     public User login(UserLoginRequest userLoginRequest) {
         User user = userDao.getUserByEmail(userLoginRequest.getEmail());
@@ -58,16 +60,19 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    //藉由會員編號獲取會員
     @Override
     public User getUserById(Integer userId) {
         return userDao.getUserById(userId);
     }
 
+    //獲取所有會員
     @Override
     public List<User> getUsers() {
         return userDao.getUsers();
     }
 
+    //修改會員密碼
     @Override
     public void updateUser(Integer userId, UserUpdateRequest userUpdateRequest) {
         User user = userDao.getUserById(userId);
