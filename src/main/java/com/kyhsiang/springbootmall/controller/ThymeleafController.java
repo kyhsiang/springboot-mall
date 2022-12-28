@@ -18,6 +18,9 @@ public class ThymeleafController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private HttpSession session;
+
     @GetMapping("/index")
     public String index() {
         return "index";
@@ -41,7 +44,7 @@ public class ThymeleafController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout() {
         session.invalidate();
         return "index";
     }

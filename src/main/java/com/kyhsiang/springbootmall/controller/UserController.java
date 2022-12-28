@@ -19,6 +19,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private HttpSession session;
+
     //註冊會員
     @PostMapping("/users/register")
     public ResponseEntity<User> register(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
@@ -29,8 +32,7 @@ public class UserController {
 
     //登入
     @PostMapping("/users/login")
-    public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest,
-                                      HttpSession session){
+    public ResponseEntity<User> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
         User user = userService.login(userLoginRequest);
         session.setAttribute("userId", user.getUserId());
         session.setAttribute("email", userLoginRequest.getEmail());
@@ -39,8 +41,7 @@ public class UserController {
 
     //修改會員密碼
     @PutMapping("/users/update")
-    public ResponseEntity<User> updateUser(@RequestBody @Valid UserUpdateRequest userUpdateRequest,
-                                           HttpSession session) {
+    public ResponseEntity<User> updateUser(@RequestBody @Valid UserUpdateRequest userUpdateRequest) {
         Integer userId = (Integer) session.getAttribute("userId");
         userService.updateUser(userId, userUpdateRequest);
         User updatedUser = userService.getUserById(userId);

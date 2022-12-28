@@ -29,7 +29,7 @@ public class OrderControllerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    // 創建訂單
+    //創建訂單
     @Transactional
     @Test
     public void createOrder_success() throws Exception {
@@ -38,12 +38,12 @@ public class OrderControllerTest {
 
         BuyItem buyItem1 = new BuyItem();
         buyItem1.setProductId(1);
-        buyItem1.setQuantity(5);
+        buyItem1.setQuantity(1);
         buyItemList.add(buyItem1);
 
         BuyItem buyItem2 = new BuyItem();
         buyItem2.setProductId(2);
-        buyItem2.setQuantity(2);
+        buyItem2.setQuantity(1);
         buyItemList.add(buyItem2);
 
         createOrderRequest.setBuyItemList(buyItemList);
@@ -51,15 +51,15 @@ public class OrderControllerTest {
         String json = objectMapper.writeValueAsString(createOrderRequest);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/{userId}/orders", 1)
+                .post("/users/{userId}/orders", 2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(201))
                 .andExpect(jsonPath("$.orderId", notNullValue()))
-                .andExpect(jsonPath("$.userId", equalTo(1)))
-                .andExpect(jsonPath("$.totalAmount", equalTo(750)))
+                .andExpect(jsonPath("$.userId", equalTo(2)))
+                .andExpect(jsonPath("$.totalAmount", equalTo(298)))
                 .andExpect(jsonPath("$.orderItemList", hasSize(2)))
                 .andExpect(jsonPath("$.createdDate", notNullValue()))
                 .andExpect(jsonPath("$.lastModifiedDate", notNullValue()));
@@ -75,7 +75,7 @@ public class OrderControllerTest {
         String json = objectMapper.writeValueAsString(createOrderRequest);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/{userId}/orders", 1)
+                .post("/users/{userId}/orders", 2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
@@ -123,7 +123,7 @@ public class OrderControllerTest {
         String json = objectMapper.writeValueAsString(createOrderRequest);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/{userId}/orders", 1)
+                .post("/users/{userId}/orders", 2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
@@ -147,7 +147,7 @@ public class OrderControllerTest {
         String json = objectMapper.writeValueAsString(createOrderRequest);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/{userId}/orders", 1)
+                .post("/users/{userId}/orders", 2)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json);
 
@@ -155,36 +155,30 @@ public class OrderControllerTest {
                 .andExpect(status().is(400));
     }
 
-    // 查詢訂單列表
+    //查詢訂單列表
     @Test
     public void getOrders() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/users/{userId}/orders", 1);
+                .get("/users/{userId}/orders", 2);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.limit", notNullValue()))
                 .andExpect(jsonPath("$.offset", notNullValue()))
                 .andExpect(jsonPath("$.total", notNullValue()))
-                .andExpect(jsonPath("$.results", hasSize(2)))
+                .andExpect(jsonPath("$.results", hasSize(1)))
                 .andExpect(jsonPath("$.results[0].orderId", notNullValue()))
-                .andExpect(jsonPath("$.results[0].userId", equalTo(1)))
-                .andExpect(jsonPath("$.results[0].totalAmount", equalTo(100000)))
-                .andExpect(jsonPath("$.results[0].orderItemList", hasSize(1)))
+                .andExpect(jsonPath("$.results[0].userId", equalTo(2)))
+                .andExpect(jsonPath("$.results[0].totalAmount", equalTo(2198)))
+                .andExpect(jsonPath("$.results[0].orderItemList", hasSize(4)))
                 .andExpect(jsonPath("$.results[0].createdDate", notNullValue()))
-                .andExpect(jsonPath("$.results[0].lastModifiedDate", notNullValue()))
-                .andExpect(jsonPath("$.results[1].orderId", notNullValue()))
-                .andExpect(jsonPath("$.results[1].userId", equalTo(1)))
-                .andExpect(jsonPath("$.results[1].totalAmount", equalTo(500690)))
-                .andExpect(jsonPath("$.results[1].orderItemList", hasSize(3)))
-                .andExpect(jsonPath("$.results[1].createdDate", notNullValue()))
-                .andExpect(jsonPath("$.results[1].lastModifiedDate", notNullValue()));
+                .andExpect(jsonPath("$.results[0].lastModifiedDate", notNullValue()));
     }
 
     @Test
     public void getOrders_pagination() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/users/{userId}/orders", 1)
+                .get("/users/{userId}/orders", 2)
                 .param("limit", "2")
                 .param("offset", "2");
 
@@ -199,7 +193,7 @@ public class OrderControllerTest {
     @Test
     public void getOrders_userHasNoOrder() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/users/{userId}/orders", 2);
+                .get("/users/{userId}/orders", 1);
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk())
