@@ -44,7 +44,7 @@
             password: $("#password").val()
         }
         $.ajax({
-            type: "POST",
+            method: "POST",
             dataType: "json",
             contentType: "application/json",
             url: "/users/register",

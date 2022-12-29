@@ -27,8 +27,8 @@
           <label class="form-label">種類</label>
           <select class="form-select" id="category" name="category">
             <option>FOOD</option>
-            <option>CAR</option>
-            <option>E_BOOK</option>
+            <option>GAME</option>
+            <option>BOOK</option>
           </select>
         </div>
         <div class="mb-3">
@@ -79,10 +79,11 @@
       url: "/products/" + $("#productId").val(),
       method: "put",
       dataType: "json",
+      contentType: "application/json",
       data: JSON.stringify(formData)
     }).done(function (res) {
       console.log(res);
-      alert("產品編號 " + productId + " 修改成功");
+      alert("產品編號 " + res.productId + " 修改成功");
       location.href = "/index";
     }).fail(function () {
       alert("查無此商品或輸入不存在的種類");

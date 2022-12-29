@@ -6,7 +6,9 @@ import com.kyhsiang.springbootmall.dto.ProductRequest;
 import com.kyhsiang.springbootmall.model.Product;
 import com.kyhsiang.springbootmall.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -49,6 +51,10 @@ public class ProductServiceImpl implements ProductService {
     //藉由商品編號刪除商品
     @Override
     public void deleteProductById(Integer productId) {
+        Product product = productDao.getProductById(productId);
+        if (product == null) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
+        }
         productDao.deleteProductById(productId);
     }
 }

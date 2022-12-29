@@ -38,10 +38,11 @@
       url: "/products/" + $("#productId").val(),
       method: "delete",
       dataType: "json",
+      contentType: "application/json",
       data: {}
     }).done(function (res) {
       console.log(res);
-      alert("產品編號 " + productId + " 刪除成功");
+      alert("產品編號 " + $("#productId").val() + " 刪除成功");
       location.href = "/index";
     }).fail(function () {
       alert("查無此商品");
