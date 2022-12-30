@@ -42,6 +42,8 @@ util-->這裡用來放置可能會用到的工具類，就像 Page 是用來處�
 
 最後為了測試代碼的正確性，還撰寫了單元測試來看看代碼是否有誤，這邊使用了 H2 資料庫，好處是即使斷線了也能獲取資料庫數據，不需要去依賴外部的資料庫
 
+MySQL 資料庫創建語法請參照 springboot-mall/src/main/resources/static/sql/data.sql 的內容
+
 ### 前端相關：
 
 前端頁面使用了 Bootstrap 5 和 Thymeleaf 框架來撰寫代碼，前端想和後端溝通的話主要是使用 AJAX 技術來達成，少部份會用到 Thymeleaf 語法來獲取後端的數據
