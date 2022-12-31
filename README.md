@@ -19,6 +19,7 @@
 10. AJAX
 11. 購物車 Cookie
 12. Unit Test
+13. AWS
 
 ## 作品集說明
 
@@ -55,3 +56,7 @@ MySQL 資料庫創建語法請參照 springboot-mall/src/main/resources/static/s
 ### 使用說明：
 
 https://torpid-satin-499.notion.site/4974659212ef4fff9b10edaba172a593
+
+### AWS雲端部署網頁：
+
+http://springbootmall-env.eba-gam37x3s.ap-northeast-1.elasticbeanstalk.com/
